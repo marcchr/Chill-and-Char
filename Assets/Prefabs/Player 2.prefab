@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: 4496726935712115771}
   - component: {fileID: 8058695644448719568}
   - component: {fileID: 7644112204640797185}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Player 2
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -142,7 +142,6 @@ MonoBehaviour:
   canJump: 1
   jumpValue: 0
   maxJumpValue: 20
-  resetPosition: {x: -7.5, y: -3, z: 0}
 --- !u!61 &2602928240569580824
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -159,7 +158,7 @@ BoxCollider2D:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 512
+    m_Bits: 0
   m_LayerOverridePriority: 0
   m_ForceSendLayers:
     serializedVersion: 2

@@ -112,7 +112,7 @@ public class PlayerMovement : NetworkBehaviour
         //    movement = rb.linearVelocity
         //};
 
-        isGrounded = Physics2D.OverlapBox(new Vector2(gameObject.transform.position.x, gameObject.transform.position.y - boxCollider.size.y * 0.5f + boxCollider.offset.y), new Vector2(1f, 0.3f), 0f, groundMask);
+        isGrounded = Physics2D.OverlapBox(new Vector2(gameObject.transform.position.x, gameObject.transform.position.y - boxCollider.size.y * 0.5f + boxCollider.offset.y), new Vector2(0.9f, 0.3f), 0f, groundMask);
 
         if (!isGrounded)
         {
@@ -126,8 +126,6 @@ public class PlayerMovement : NetworkBehaviour
         if (Input.GetKey(KeyCode.Space) && isGrounded && canJump)
         {
             jumpValue += 0.1f;
-            animator.SetBool("isAboutToJump", true);
-            animator.SetBool("isRunning", false);
         }
 
         if (Input.GetKeyDown(KeyCode.Space) && isGrounded && canJump)
@@ -137,8 +135,6 @@ public class PlayerMovement : NetworkBehaviour
 
         if (jumpValue > maxJumpValue && isGrounded)
         {
-            //animator.SetBool("isAboutToJump", false);
-            //animator.SetBool("isJumping", false);
             float tempx = moveInput * walkSpeed;
             float tempy = jumpValue;
             rb.linearVelocity = new Vector2(tempx, tempy);
@@ -147,9 +143,6 @@ public class PlayerMovement : NetworkBehaviour
 
         if (Input.GetKeyUp(KeyCode.Space))
         {
-            animator.SetBool("isAboutToJump", false);
-            //animator.SetBool("isJumping", true);
-
             if (isGrounded)
             {
                 rb.linearVelocity = new Vector2(moveInput * walkSpeed, jumpValue);
@@ -180,7 +173,6 @@ public class PlayerMovement : NetworkBehaviour
         if (rb.linearVelocity.y > 0f && !isGrounded)
         {
             animator.SetBool("isJumping", true);
-            animator.SetBool("isAboutToJump", false);
             animator.SetBool("isRunning", false);
         }
         else if (rb.linearVelocity.y < 0f)
@@ -188,7 +180,6 @@ public class PlayerMovement : NetworkBehaviour
             animator.SetBool("isFalling", true);
             animator.SetBool("isJumping", false);
             animator.SetBool("isRunning", false);
-            animator.SetBool("isAboutToJump", false);
         }
         else
         {
@@ -201,9 +192,7 @@ public class PlayerMovement : NetworkBehaviour
     {
         if (collision.gameObject.CompareTag("Hazard"))
         {
-            animator.SetTrigger("isDead");
-            float delay = animator.GetCurrentAnimatorStateInfo(0).length;
-            Invoke("ResetPosition", delay);
+            ResetPosition();
         }
     }
 
@@ -217,15 +206,11 @@ public class PlayerMovement : NetworkBehaviour
     {
         rb.linearVelocity = Vector3.zero;
         transform.position = resetPosition;
-        animator.SetBool("isFalling", false);
-        animator.SetBool("isJumping", false);
-        animator.SetBool("isRunning", false);
-        animator.SetBool("isAboutToJump", false);
     }
 
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;
-        Gizmos.DrawWireCube(new Vector3(transform.position.x, transform.position.y - boxCollider.size.y * 0.5f + boxCollider.offset.y), new Vector3(1f, 0.3f));
+        Gizmos.DrawWireCube(new Vector3(transform.position.x, transform.position.y - boxCollider.size.y * 0.5f + boxCollider.offset.y), new Vector3(0.9f, 0.3f));
     }
 }

@@ -40,7 +40,7 @@ public class RelayManager : MonoBehaviour
 
             Debug.Log(joinCode);
 
-            codeText.text = "Code: \n" + joinCode;
+            codeText.text = "Code: " + joinCode;
 
             var relayServerData = AllocationUtils.ToRelayServerData(allocation, "dtls");
 
