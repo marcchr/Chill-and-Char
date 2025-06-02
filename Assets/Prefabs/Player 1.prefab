@@ -142,6 +142,7 @@ MonoBehaviour:
   canJump: 1
   jumpValue: 0
   maxJumpValue: 20
+  resetPosition: {x: 7.5, y: -3, z: 0}
 --- !u!61 &8072043875828553956
 BoxCollider2D:
   m_ObjectHideFlags: 0

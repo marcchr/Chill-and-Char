@@ -186,24 +186,25 @@ public class PlayerMovement : NetworkBehaviour
         }
     }
 
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Hazard"))
+        {
+            ResetPosition();
+        }
+    }
+
     void ResetJump()
     {
         canJump = false;
         jumpValue = 0f;
     }
 
-    //[ServerRpc(RequireOwnership = false)] //server owns this object but client can request a spawn
-    //public void SpawnPlayerServerRpc(ulong clientId, int prefabId)
-    //{
-    //    GameObject newPlayer;
-    //    if (prefabId == 0)
-    //        newPlayer = (GameObject)Instantiate(playerPrefabA);
-    //    else
-    //        newPlayer = (GameObject)Instantiate(playerPrefabB);
-    //    NetworkObject netObj = newPlayer.GetComponent<NetworkObject>();
-    //    newPlayer.SetActive(true);
-    //    netObj.SpawnAsPlayerObject(clientId, true);
-    //}
+    void ResetPosition()
+    {
+        rb.linearVelocity = Vector3.zero;
+        transform.position = resetPosition;
+    }
 
     private void OnDrawGizmosSelected()
     {
