@@ -143,6 +143,7 @@ MonoBehaviour:
   jumpValue: 0
   maxJumpValue: 20
   resetPosition: {x: 7.5, y: -3, z: 0}
+  jumpSprite: {fileID: -4263223913693826002, guid: 3f4766e5d54ad0b41bf716496f0c80c8, type: 3}
 --- !u!61 &8072043875828553956
 BoxCollider2D:
   m_ObjectHideFlags: 0
