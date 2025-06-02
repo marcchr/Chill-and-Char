@@ -1,3 +1,4 @@
+using Unity.Cinemachine;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -62,6 +63,22 @@ public class PlayerMovement : NetworkBehaviour
         {
             spriteRenderer.flipX = newValue;
         };
+
+        if (!IsOwner)
+        {
+            return;
+        }
+
+        CinemachineCamera playerCam = FindFirstObjectByType<CinemachineCamera>();
+
+        if (playerCam != null)
+        {
+            playerCam.Follow = transform;
+        }
+        else
+        {
+            Debug.LogWarning("No CinemachineCamera found.");
+        }
     }
 
 

@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.Networking;
 using Unity.Netcode;
-
+using Unity.Cinemachine;
 public class PlayerSpawner : NetworkBehaviour
 {
     public GameObject playerPrefabA;
