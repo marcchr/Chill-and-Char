@@ -16,6 +16,8 @@ public class PlayerMovement : NetworkBehaviour
     public float jumpValue = 0.0f;
     public float maxJumpValue = 20f;
 
+    public Vector3 resetPosition;
+
     private Animator animator;
     private BoxCollider2D boxCollider;
     private SpriteRenderer spriteRenderer;
@@ -124,6 +126,8 @@ public class PlayerMovement : NetworkBehaviour
         if (Input.GetKey(KeyCode.Space) && isGrounded && canJump)
         {
             jumpValue += 0.1f;
+            animator.SetBool("isAboutToJump", true);
+            animator.SetBool("isRunning", false);
         }
 
         if (Input.GetKeyDown(KeyCode.Space) && isGrounded && canJump)
@@ -133,6 +137,8 @@ public class PlayerMovement : NetworkBehaviour
 
         if (jumpValue > maxJumpValue && isGrounded)
         {
+            //animator.SetBool("isAboutToJump", false);
+            //animator.SetBool("isJumping", false);
             float tempx = moveInput * walkSpeed;
             float tempy = jumpValue;
             rb.linearVelocity = new Vector2(tempx, tempy);
@@ -141,6 +147,9 @@ public class PlayerMovement : NetworkBehaviour
 
         if (Input.GetKeyUp(KeyCode.Space))
         {
+            animator.SetBool("isAboutToJump", false);
+            //animator.SetBool("isJumping", true);
+
             if (isGrounded)
             {
                 rb.linearVelocity = new Vector2(moveInput * walkSpeed, jumpValue);
@@ -171,6 +180,7 @@ public class PlayerMovement : NetworkBehaviour
         if (rb.linearVelocity.y > 0f && !isGrounded)
         {
             animator.SetBool("isJumping", true);
+            animator.SetBool("isAboutToJump", false);
             animator.SetBool("isRunning", false);
         }
         else if (rb.linearVelocity.y < 0f)
@@ -178,11 +188,20 @@ public class PlayerMovement : NetworkBehaviour
             animator.SetBool("isFalling", true);
             animator.SetBool("isJumping", false);
             animator.SetBool("isRunning", false);
+            animator.SetBool("isAboutToJump", false);
         }
         else
         {
             animator.SetBool("isJumping", false);
             animator.SetBool("isFalling", false);
+        }
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Hazard"))
+        {
+            ResetPosition();
         }
     }
 
@@ -192,18 +211,11 @@ public class PlayerMovement : NetworkBehaviour
         jumpValue = 0f;
     }
 
-    //[ServerRpc(RequireOwnership = false)] //server owns this object but client can request a spawn
-    //public void SpawnPlayerServerRpc(ulong clientId, int prefabId)
-    //{
-    //    GameObject newPlayer;
-    //    if (prefabId == 0)
-    //        newPlayer = (GameObject)Instantiate(playerPrefabA);
-    //    else
-    //        newPlayer = (GameObject)Instantiate(playerPrefabB);
-    //    NetworkObject netObj = newPlayer.GetComponent<NetworkObject>();
-    //    newPlayer.SetActive(true);
-    //    netObj.SpawnAsPlayerObject(clientId, true);
-    //}
+    void ResetPosition()
+    {
+        rb.linearVelocity = Vector3.zero;
+        transform.position = resetPosition;
+    }
 
     private void OnDrawGizmosSelected()
     {

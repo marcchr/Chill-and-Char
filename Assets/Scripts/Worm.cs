@@ -8,6 +8,8 @@ public class Worm : NetworkBehaviour
     public float cooldownDuration;
     private float timer = 0f;
 
+    public LayerMask playerDetectionLayer;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -27,9 +29,18 @@ public class Worm : NetworkBehaviour
         if(timer > cooldownDuration)
         {
             timer = 0f;
-            Attack();
+            
+            CheckIfPlayerInRange();
+        }
+    }
 
-            //AttackClientRpc();
+    private void CheckIfPlayerInRange()
+    {
+        Collider2D hit = Physics2D.OverlapBox(transform.position, new Vector3(40f, 2f), 0f, playerDetectionLayer);
+
+        if (hit != null)
+        {
+            Attack();
         }
     }
     private void Attack()
@@ -38,9 +49,9 @@ public class Worm : NetworkBehaviour
         bullet.GetComponent<NetworkObject>().Spawn(true);
     }
 
-    //void Attack()
-    //{
-    //    spawnedObjectTransform = Instantiate(bulletPrefab, bulletPosition.position, Quaternion.identity, bulletPosition);
-    //    spawnedObjectTransform.GetComponent<NetworkObject>().Spawn(true);
-    //}
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireCube(transform.position, new Vector3(40f, 2f));
+    }
 }
