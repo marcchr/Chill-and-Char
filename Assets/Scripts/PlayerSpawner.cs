@@ -38,6 +38,9 @@ public class PlayerSpawner : NetworkBehaviour
             newPlayer = (GameObject)Instantiate(playerPrefabA);
         else
             newPlayer = (GameObject)Instantiate(playerPrefabB);
+
+        newPlayer.transform.position = newPlayer.GetComponent<PlayerMovement>().resetPosition;
+
         NetworkObject netObj = newPlayer.GetComponent<NetworkObject>();
         newPlayer.SetActive(true);
         netObj.SpawnAsPlayerObject(clientId, true);

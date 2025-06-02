@@ -1,5 +1,6 @@
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.UIElements.Experimental;
 
 public class Worm : NetworkBehaviour
 {
@@ -7,6 +8,8 @@ public class Worm : NetworkBehaviour
     public Transform bulletPosition;
     public float cooldownDuration;
     private float timer = 0f;
+
+    public LayerMask playerDetectionLayer;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -26,10 +29,20 @@ public class Worm : NetworkBehaviour
 
         if(timer > cooldownDuration)
         {
+            CheckIfPlayerInRange();
             timer = 0f;
-            Attack();
 
             //AttackClientRpc();
+        }
+    }
+
+    private void CheckIfPlayerInRange()
+    {
+        Collider2D hit = Physics2D.OverlapBox(transform.position, new Vector2(40f, 4f), 0f, playerDetectionLayer);
+
+        if (hit != null)
+        {
+            Attack();
         }
     }
     private void Attack()

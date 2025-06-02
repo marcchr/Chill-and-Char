@@ -174,7 +174,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 4
+  m_Constraints: 5
 --- !u!61 &6268543918872781704
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -262,6 +262,9 @@ MonoBehaviour:
   bulletPrefab: {fileID: 6911674998857992737, guid: 1a0182e34ccf41744b9b87a598bb6799, type: 3}
   bulletPosition: {fileID: 3027110255028173253}
   cooldownDuration: 4
+  playerDetectionLayer:
+    serializedVersion: 2
+    m_Bits: 512
 --- !u!114 &8534833871361093674
 MonoBehaviour:
   m_ObjectHideFlags: 0

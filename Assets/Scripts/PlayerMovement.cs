@@ -16,6 +16,8 @@ public class PlayerMovement : NetworkBehaviour
     public float jumpValue = 0.0f;
     public float maxJumpValue = 20f;
 
+    public Vector3 resetPosition;
+
     private Animator animator;
     private BoxCollider2D boxCollider;
     private SpriteRenderer spriteRenderer;
@@ -123,11 +125,13 @@ public class PlayerMovement : NetworkBehaviour
 
         if (Input.GetKey(KeyCode.Space) && isGrounded && canJump)
         {
+            
             jumpValue += 0.1f;
         }
 
         if (Input.GetKeyDown(KeyCode.Space) && isGrounded && canJump)
         {
+            animator.SetBool("isAboutToJump", true);
             rb.linearVelocity = new Vector2(0f, rb.linearVelocity.y);
         }
 
@@ -141,6 +145,7 @@ public class PlayerMovement : NetworkBehaviour
 
         if (Input.GetKeyUp(KeyCode.Space))
         {
+            animator.SetBool("isAboutToJump", false);
             if (isGrounded)
             {
                 rb.linearVelocity = new Vector2(moveInput * walkSpeed, jumpValue);
@@ -187,6 +192,14 @@ public class PlayerMovement : NetworkBehaviour
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Hazard"))
+        {
+            ResetPosition();
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.CompareTag("Hazard"))
         {
