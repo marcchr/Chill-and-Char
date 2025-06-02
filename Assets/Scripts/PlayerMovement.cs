@@ -16,6 +16,8 @@ public class PlayerMovement : NetworkBehaviour
     public float jumpValue = 0.0f;
     public float maxJumpValue = 20f;
 
+    public Vector3 resetPosition;
+
     private Animator animator;
     private BoxCollider2D boxCollider;
     private SpriteRenderer spriteRenderer;
