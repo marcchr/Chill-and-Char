@@ -112,7 +112,7 @@ public class PlayerMovement : NetworkBehaviour
         //    movement = rb.linearVelocity
         //};
 
-        isGrounded = Physics2D.OverlapBox(new Vector2(gameObject.transform.position.x, gameObject.transform.position.y - boxCollider.size.y * 0.5f + boxCollider.offset.y), new Vector2(0.9f, 0.3f), 0f, groundMask);
+        isGrounded = Physics2D.OverlapBox(new Vector2(gameObject.transform.position.x, gameObject.transform.position.y - boxCollider.size.y * 0.5f + boxCollider.offset.y), new Vector2(1f, 0.3f), 0f, groundMask);
 
         if (!isGrounded)
         {
@@ -201,7 +201,9 @@ public class PlayerMovement : NetworkBehaviour
     {
         if (collision.gameObject.CompareTag("Hazard"))
         {
-            ResetPosition();
+            animator.SetTrigger("isDead");
+            float delay = animator.GetCurrentAnimatorStateInfo(0).length;
+            Invoke("ResetPosition", delay);
         }
     }
 
@@ -215,11 +217,15 @@ public class PlayerMovement : NetworkBehaviour
     {
         rb.linearVelocity = Vector3.zero;
         transform.position = resetPosition;
+        animator.SetBool("isFalling", false);
+        animator.SetBool("isJumping", false);
+        animator.SetBool("isRunning", false);
+        animator.SetBool("isAboutToJump", false);
     }
 
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;
-        Gizmos.DrawWireCube(new Vector3(transform.position.x, transform.position.y - boxCollider.size.y * 0.5f + boxCollider.offset.y), new Vector3(0.9f, 0.3f));
+        Gizmos.DrawWireCube(new Vector3(transform.position.x, transform.position.y - boxCollider.size.y * 0.5f + boxCollider.offset.y), new Vector3(1f, 0.3f));
     }
 }
