@@ -6,6 +6,7 @@ using UnityEngine.UIElements;
 public class PlayerMovement : NetworkBehaviour
 {
     public float walkSpeed;
+    public float xAddedSpeed;
     private float moveInput;
     public bool isGrounded;
     private Rigidbody2D rb;
@@ -15,6 +16,7 @@ public class PlayerMovement : NetworkBehaviour
     public bool canJump;
     public float jumpValue = 0.0f;
     public float maxJumpValue = 20f;
+    public float jumpValueRate = 0.1f;
 
     public Vector3 resetPosition;
 
@@ -112,7 +114,7 @@ public class PlayerMovement : NetworkBehaviour
         //    movement = rb.linearVelocity
         //};
 
-        isGrounded = Physics2D.OverlapBox(new Vector2(gameObject.transform.position.x, gameObject.transform.position.y - boxCollider.size.y * 0.5f + boxCollider.offset.y), new Vector2(0.9f, 0.3f), 0f, groundMask);
+        isGrounded = Physics2D.OverlapBox(new Vector2(gameObject.transform.position.x, gameObject.transform.position.y - boxCollider.size.y * 0.5f + boxCollider.offset.y), new Vector2(0.95f, 0.3f), 0f, groundMask);
 
         if (!isGrounded)
         {
@@ -137,7 +139,7 @@ public class PlayerMovement : NetworkBehaviour
 
         if (jumpValue > maxJumpValue && isGrounded)
         {
-            float tempx = moveInput * walkSpeed;
+            float tempx = moveInput * (walkSpeed + xAddedSpeed);
             float tempy = jumpValue;
             rb.linearVelocity = new Vector2(tempx, tempy);
             Invoke("ResetJump", 0.1f);
@@ -146,9 +148,10 @@ public class PlayerMovement : NetworkBehaviour
         if (Input.GetKeyUp(KeyCode.Space))
         {
             animator.SetBool("isAboutToJump", false);
+            animator.SetBool("isJumping", false);
             if (isGrounded)
             {
-                rb.linearVelocity = new Vector2(moveInput * walkSpeed, jumpValue);
+                rb.linearVelocity = new Vector2(moveInput * (walkSpeed + xAddedSpeed), jumpValue);
                 jumpValue = 0f;
             }
             canJump = true;
@@ -193,6 +196,7 @@ public class PlayerMovement : NetworkBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        Debug.Log("collision detected");
         if (collision.gameObject.CompareTag("Hazard"))
         {
             ResetPosition();
@@ -217,11 +221,15 @@ public class PlayerMovement : NetworkBehaviour
     {
         rb.linearVelocity = Vector3.zero;
         transform.position = resetPosition;
+        animator.SetBool("isJumping", false);
+        animator.SetBool("isRunning", false); 
+        animator.SetBool("isAboutToJump", false);
+        animator.SetBool("isRunning", false);
     }
 
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;
-        Gizmos.DrawWireCube(new Vector3(transform.position.x, transform.position.y - boxCollider.size.y * 0.5f + boxCollider.offset.y), new Vector3(0.9f, 0.3f));
+        Gizmos.DrawWireCube(new Vector3(transform.position.x, transform.position.y - boxCollider.size.y * 0.5f + boxCollider.offset.y), new Vector3(0.95f, 0.3f));
     }
 }

@@ -11,10 +11,12 @@ public class Worm : NetworkBehaviour
 
     public LayerMask playerDetectionLayer;
 
+    private Animator animator;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+        animator = GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -42,7 +44,8 @@ public class Worm : NetworkBehaviour
 
         if (hit != null)
         {
-            Attack();
+            animator.SetTrigger("isAttacking");
+            Invoke("Attack", 1.1f);
         }
     }
     private void Attack()
