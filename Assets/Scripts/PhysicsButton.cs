@@ -9,6 +9,7 @@ public class PhysicsButton : NetworkBehaviour
 
     public bool isActivated;
     private Rigidbody2D rb2D;
+    private SpriteRenderer sprite;
 
     //private NetworkVariable<bool> isActivated = new NetworkVariable<bool>(
     //       false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner
@@ -24,6 +25,7 @@ public class PhysicsButton : NetworkBehaviour
     void Start()
     {
         rb2D = GetComponent<Rigidbody2D>();
+        sprite = rb2D.GetComponent<SpriteRenderer>();
         maxY = transform.position.y;
         minY = transform.position.y - 0.5f;
         activatedY = transform.position.y - 0.25f;
@@ -50,10 +52,12 @@ public class PhysicsButton : NetworkBehaviour
         if (transform.position.y <= activatedY)
         {
             isActivated = true;
+            sprite.color = Color.yellow;
         }
         else
         {
             isActivated = false;
+            sprite.color = Color.white;
         }
     }
 

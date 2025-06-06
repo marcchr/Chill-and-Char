@@ -15,20 +15,29 @@ public class PuzzleManager : NetworkBehaviour
     private bool openDoor;
     private NetworkObject networkObject;
     private NetworkObject doorNetworkObj;
+    private SpriteRenderer doorSprite;
 
     private bool lastButtonAState = false;
     private bool lastButtonBState = false;
 
     public override void OnNetworkSpawn()
     {
-        if (IsServer)
-        {
-            Transform puzzleBox = Instantiate(box, boxSpawnPos.position, Quaternion.identity);
-            puzzleBox.GetComponent<NetworkObject>().Spawn(true);
+        //if (IsServer)
+        //{
+        //    Transform puzzleBox = Instantiate(box, boxSpawnPos.position, Quaternion.identity);
+        //    puzzleBox.GetComponent<NetworkObject>().Spawn(true);
 
-            Debug.Log("spawning box");
-        }
+        //    Debug.Log("spawning box");
+        //}
 
+        //Debug.Log(NetworkManager.LocalClientId);
+        //Debug.Log(OwnerClientId);
+        //Debug.Log(box);
+
+        //if (OwnerClientId != 0)
+        //{
+        //    DespawnObjectServerRpc(box.gameObject);
+        //}
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -39,6 +48,7 @@ public class PuzzleManager : NetworkBehaviour
         buttonB.GetComponent<NetworkObject>();
         box.GetComponent<NetworkObject>();
         doorNetworkObj = door.GetComponent<NetworkObject>();
+        doorSprite = door.GetComponent<SpriteRenderer>();
     }
 
     // Update is called once per frame
@@ -64,10 +74,12 @@ public class PuzzleManager : NetworkBehaviour
         if (buttonA.isActivated || buttonB.isActivated)
         {
             openDoor = true;
+            doorSprite.color = Color.yellow;
         }
         else
         {
             openDoor = false;
+            doorSprite.color = Color.white;
         }
 
         if (openDoor && door.transform.position.y > doorEndPos.position.y)
@@ -96,4 +108,12 @@ public class PuzzleManager : NetworkBehaviour
         networkObject.ChangeOwnership(clientId);
         doorNetworkObj.ChangeOwnership(clientId);
     }
+
+    //[ServerRpc(RequireOwnership = false)]
+    //public void DespawnObjectServerRpc(NetworkObjectReference networkObject)
+    //{
+    //    NetworkObject boxNetObj = networkObject;
+    //    boxNetObj.Despawn();
+    //}
+
 }
