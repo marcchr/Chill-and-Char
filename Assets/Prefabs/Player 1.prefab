@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: 8484641583701626784}
   - component: {fileID: 687141408064132922}
   - component: {fileID: 4659174240139393344}
+  - component: {fileID: 898525567341606950}
   m_Layer: 8
   m_Name: Player 1
   m_TagString: Player
@@ -143,7 +144,7 @@ MonoBehaviour:
   canJump: 1
   jumpValue: 0
   maxJumpValue: 20
-  jumpValueRate: 0.2
+  jumpValueRate: 0.3
   resetPosition: {x: 7.5, y: 0, z: 0}
 --- !u!61 &8072043875828553956
 BoxCollider2D:
@@ -301,3 +302,20 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   TransitionStateInfoList: []
   m_Animator: {fileID: 687141408064132922}
+--- !u!114 &898525567341606950
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7002022421554982726}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 80d7c879794dfda4687da0e400131852, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
+  NetworkRigidbodyBaseExpanded: 0
+  UseRigidBodyForMotion: 1
+  AutoUpdateKinematicState: 0
+  AutoSetKinematicOnDespawn: 1

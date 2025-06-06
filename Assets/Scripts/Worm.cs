@@ -54,6 +54,12 @@ public class Worm : NetworkBehaviour
         bullet.GetComponent<NetworkObject>().Spawn(true);
     }
 
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireCube(transform.position, new Vector2(40f, 4f));
+    }
+
     //void Attack()
     //{
     //    spawnedObjectTransform = Instantiate(bulletPrefab, bulletPosition.position, Quaternion.identity, bulletPosition);

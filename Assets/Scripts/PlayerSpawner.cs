@@ -30,7 +30,7 @@ public class PlayerSpawner : NetworkBehaviour
             SpawnPlayerServerRpc(NetworkManager.Singleton.LocalClientId, 1);
     }
 
-    [ServerRpc(RequireOwnership = false)] //server owns this object but client can request a spawn
+    [ServerRpc(RequireOwnership = false)] 
     public void SpawnPlayerServerRpc(ulong clientId, int prefabId)
     {
         GameObject newPlayer;

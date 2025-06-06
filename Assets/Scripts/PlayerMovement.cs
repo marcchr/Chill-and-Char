@@ -24,13 +24,6 @@ public class PlayerMovement : NetworkBehaviour
     private BoxCollider2D boxCollider;
     private SpriteRenderer spriteRenderer;
 
-    //private NetworkVariable<MyCustomData> position = new NetworkVariable<MyCustomData>(
-    //    new MyCustomData
-    //    {
-    //        movement = new Vector2(0,0),
-    //    }, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner
-    //    );
-
     private NetworkVariable<bool> flipX = new NetworkVariable<bool>(
         false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner
         );
@@ -54,15 +47,6 @@ public class PlayerMovement : NetworkBehaviour
     //}
     public override void OnNetworkSpawn()
     {
-        //if (IsServer)
-        //{
-        //    SpawnPlayerServerRpc(NetworkManager.Singleton.LocalClientId, 0);
-        //}
-        //else
-        //{
-        //    SpawnPlayerServerRpc(NetworkManager.Singleton.LocalClientId, 1);
-        //}
-
         flipX.OnValueChanged += (bool previousValue, bool newValue) =>
         {
             spriteRenderer.flipX = newValue;
@@ -201,6 +185,20 @@ public class PlayerMovement : NetworkBehaviour
         {
             ResetPosition();
         }
+
+        NetworkObject networkObject = collision.gameObject.GetComponent<NetworkObject>();
+
+        if (networkObject != null && !networkObject.IsOwner && !collision.gameObject.CompareTag("Player"))
+        {
+            TransferOwnershipServerRpc(collision.gameObject);
+        }
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    public void TransferOwnershipServerRpc(NetworkObjectReference collision)
+    {
+        NetworkObject collisionObject = collision;
+        collisionObject.ChangeOwnership(OwnerClientId);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
